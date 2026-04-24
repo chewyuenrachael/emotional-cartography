@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+
+@import "tailwindcss";
+
+/* ============================================================
+   EMOTIONAL CARTOGRAPHY - Global Styles
+   ============================================================ */
+
+:root {
+  /* Base colors */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --text-primary: #e8e8ed;
+  --text-muted: #6b6b7b;
+
+  /* Emotion cluster colors - derived from clustering results */
+  --cluster-a: #FF6B6B; /* Energetic/Excited */
+  --cluster-b: #4ECDC4; /* Calm/Reflective */
+  --cluster-c: #FFE66D; /* Neutral/Observational */
+  --cluster-d: #95E1D3; /* Contemplative */
+
+  /* Accents */
+  --accent-spectrogram: #7B61FF;
+  --accent-path: #FF9F1C;
+}
+
+/* Base styles */
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent iOS zoom on input focus */
+  touch-action: manipulation;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Newsreader', Georgia, serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.font-serif {
+  font-family: 'Newsreader', Georgia, serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  /* Prevent overscroll bounce on mobile */
+  overscroll-behavior: none;
+}
+
+/* Hide scrollbar but keep functionality */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* Custom selection color */
+::selection {
+  background-color: var(--accent-spectrogram);
+  color: white;
+}
+
+/* Mapbox overrides for dark theme */
+.mapboxgl-ctrl-logo {
+  opacity: 0.5;
+}
+
+.mapboxgl-ctrl-attrib {
+  opacity: 0.5;
+  font-size: 10px;
+}
+
+/* Hide mapbox attribution on mobile */
+@media (max-width: 640px) {
+  .mapboxgl-ctrl-attrib {
+    display: none;
+  }
+  .mapboxgl-ctrl-logo {
+    display: none;
+  }
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+/* Gradient backgrounds for emotion overlays */
+.emotion-gradient-a {
+  background: radial-gradient(circle, var(--cluster-a) 0%, transparent 70%);
+}
+
+.emotion-gradient-b {
+  background: radial-gradient(circle, var(--cluster-b) 0%, transparent 70%);
+}
+
+.emotion-gradient-c {
+  background: radial-gradient(circle, var(--cluster-c) 0%, transparent 70%);
+}
+
+.emotion-gradient-d {
+  background: radial-gradient(circle, var(--cluster-d) 0%, transparent 70%);
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(10, 10, 15, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile-optimized glass with better backdrop performance */
+@media (max-width: 768px) {
+  .glass {
+    background: rgba(10, 10, 15, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* Spectrogram glow effect */
+.spectrogram-glow {
+  box-shadow: 0 0 40px rgba(123, 97, 255, 0.3);
+}
+
+/* Mobile typography refinements */
+@media (max-width: 640px) {
+  h1 {
+    line-height: 1.1;
+  }
+  
+  h2 {
+    line-height: 1.2;
+  }
+  
+  p {
+    line-height: 1.6;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .fixed.bottom-0 {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Improve tap targets on mobile */
+@media (max-width: 768px) {
+  button, 
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
