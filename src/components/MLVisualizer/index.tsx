@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useJourneyStore } from '@/stores/journeyStore';
 import type { AudioClipFeatures, EmotionCluster, MLStage } from '@/types';
@@ -13,9 +12,6 @@ interface MLVisualizerProps {
   scrollEnd: number;
 }
 
-// Each MLVisualizer derives its own stage from where the user is within
-// its chapter's scroll range, so the reveal stays in sync with the
-// audio playhead instead of running on a wall-clock timer.
 function stageForProgress(p: number): MLStage {
   if (p < 0.1) return 'idle';
   if (p < 0.4) return 'extracting';
@@ -34,17 +30,6 @@ export function MLVisualizer({
   const mlStage = useJourneyStore((s) =>
     stageForProgress(Math.max(0, Math.min(1, (s.scrollProgress - scrollStart) / span))),
   );
-  // Furthest stage reached so far for this chapter — prevents stages
-  // from flickering backward if the user scrolls up.
-  const [maxStage, setMaxStage] = useState<MLStage>('idle');
-  const order: MLStage[] = ['idle', 'extracting', 'clustering', 'complete'];
-  const effectiveStage =
-    order.indexOf(mlStage) > order.indexOf(maxStage) ? mlStage : maxStage;
-  if (order.indexOf(mlStage) > order.indexOf(maxStage)) {
-    // Cheap state advance during render is safe because it's monotonic
-    // (only ever increases) and stops at 'complete'.
-    queueMicrotask(() => setMaxStage(mlStage));
-  }
 
   return (
     <div className="bg-black/40 backdrop-blur-md rounded-xl p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
