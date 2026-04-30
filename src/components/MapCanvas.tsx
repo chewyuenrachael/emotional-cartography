@@ -69,7 +69,7 @@ function getDrawnCoordinates(
 // Smooth camera interpolation
 // ---------------------------------------------------------------------------
 
-function getCameraState(scroll: number, chapters: Chapter[]) {
+function getCameraState(scroll: number, chapters: Chapter[], reduced: boolean) {
   const fallback = {
     center: [103.82, 1.35] as [number, number],
     zoom: 2,
@@ -80,7 +80,8 @@ function getCameraState(scroll: number, chapters: Chapter[]) {
 
   const first = chapters[0];
   const last = chapters[chapters.length - 1];
-  const bearing = scroll * 80;
+  const bearing = reduced ? 0 : scroll * 80;
+  const flat = (v: number) => (reduced ? 0 : v);
 
   // Hero — globe zoom-in toward the first city
   if (scroll < first.scrollStart) {
@@ -88,7 +89,7 @@ function getCameraState(scroll: number, chapters: Chapter[]) {
     return {
       center: first.coordinates,
       zoom: lerp(2, 4.5, t),
-      pitch: lerp(0, 45, t),
+      pitch: flat(lerp(0, 45, t)),
       bearing,
     };
   }
@@ -99,7 +100,7 @@ function getCameraState(scroll: number, chapters: Chapter[]) {
     return {
       center: last.coordinates,
       zoom: lerp(4.5, 1.8, t),
-      pitch: lerp(45, 0, t),
+      pitch: flat(lerp(45, 0, t)),
       bearing,
     };
   }
@@ -113,7 +114,7 @@ function getCameraState(scroll: number, chapters: Chapter[]) {
     return {
       center: first.coordinates,
       zoom: lerp(3.5, 5, t),
-      pitch: lerp(35, 45, t),
+      pitch: flat(lerp(35, 45, t)),
       bearing,
     };
   }
@@ -125,7 +126,7 @@ function getCameraState(scroll: number, chapters: Chapter[]) {
     return {
       center: last.coordinates,
       zoom: lerp(5, 4, t),
-      pitch: lerp(45, 40, t),
+      pitch: flat(lerp(45, 40, t)),
       bearing,
     };
   }
@@ -135,7 +136,7 @@ function getCameraState(scroll: number, chapters: Chapter[]) {
     if (scroll >= mids[i] && scroll < mids[i + 1]) {
       const raw = (scroll - mids[i]) / (mids[i + 1] - mids[i]);
       const t = easeInOutCubic(raw);
-      const arc = Math.sin(raw * Math.PI); // peaks mid-transition
+      const arc = reduced ? 0 : Math.sin(raw * Math.PI); // peaks mid-transition
 
       return {
         center: lerpCoord(
@@ -144,7 +145,7 @@ function getCameraState(scroll: number, chapters: Chapter[]) {
           t,
         ),
         zoom: 5 - arc * 1.5, // zoom out during flight
-        pitch: 45 + arc * 8, // tilt forward during flight
+        pitch: flat(45 + arc * 8), // tilt forward during flight
         bearing,
       };
     }
