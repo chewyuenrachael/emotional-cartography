@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { MotionConfig } from 'framer-motion';
 import { ScrollManager } from '@/components/ScrollManager';
 import { MapCanvas } from '@/components/MapCanvas';
 import { AudioEngine, AudioEnablePrompt } from '@/components/AudioEngine';
 import { MLVisualizer } from '@/components/MLVisualizer';
 import { NarrativePanel } from '@/components/NarrativePanel';
+import Reflections from '@/components/Reflections';
 import { useJourneyStore } from '@/stores/journeyStore';
 import type { JourneyData, AudioClipFeatures } from '@/types';
 import type { AudioClipInfo } from '@/components/AudioEngine';
@@ -96,6 +98,7 @@ export default function HomePage() {
   }
 
   return (
+    <MotionConfig reducedMotion="user">
     <main className="text-white min-h-screen">
       {/* Fixed background map */}
       <MapCanvas />
@@ -185,6 +188,8 @@ export default function HomePage() {
                         spectrogramUrl={`/spectrograms/${primaryClipId}.png`}
                         features={clipFeatures}
                         cluster={chapter.emotionCluster}
+                        scrollStart={chapter.scrollStart}
+                        scrollEnd={chapter.scrollEnd}
                       />
                     </div>
                   </div>
@@ -194,17 +199,15 @@ export default function HomePage() {
           );
         })}
 
+        {/* Findings from the CS156 paper */}
+        <Reflections />
+
         {/* Conclusion Section */}
         <section className="min-h-screen flex items-center justify-center relative z-10 py-16 md:py-0">
           <div className="text-center max-w-3xl px-4 sm:px-8">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif mb-6 sm:mb-8">
-              What the Machine Learned
+              What I Learned
             </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-white/70 leading-relaxed mb-8 sm:mb-12">
-              Agglomerative clustering worked best—it captured the nuances of voice
-              modulation better than KMeans or Spectral methods. But the real insight
-              wasn&apos;t technical.
-            </p>
             <blockquote className="text-lg sm:text-xl lg:text-2xl font-serif italic text-white/90 border-l-4 border-purple-500 pl-4 sm:pl-6 text-left">
               &quot;The process of systematizing something as messy as emotion taught me
               that even the most human problems can benefit from structure—if you
@@ -247,5 +250,6 @@ export default function HomePage() {
       {/* Audio controls - fixed at bottom */}
       <AudioEngine clips={audioClips} chapters={journeyData.chapters} />
     </main>
+    </MotionConfig>
   );
 }
