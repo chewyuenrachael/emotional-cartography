@@ -183,6 +183,7 @@ export function MapCanvas() {
 
   const scrollProgress = useJourneyStore((s) => s.scrollProgress);
   const chapters = useJourneyStore((s) => s.chapters);
+  const prefersReducedMotion = useReducedMotion() ?? false;
 
   // ---- Initialise map ----
   useEffect(() => {
@@ -404,7 +405,7 @@ export function MapCanvas() {
     const m = map.current;
 
     // Camera
-    const cam = getCameraState(scrollProgress, chapters);
+    const cam = getCameraState(scrollProgress, chapters, prefersReducedMotion);
     m.jumpTo({
       center: cam.center,
       zoom: cam.zoom,
@@ -473,11 +474,11 @@ export function MapCanvas() {
         },
       })),
     });
-  }, [scrollProgress, chapters, mapLoaded]);
+  }, [scrollProgress, chapters, mapLoaded, prefersReducedMotion]);
 
   // ---- Pulse animation (rAF loop) ----
   useEffect(() => {
-    if (!map.current || !mapLoaded) return;
+    if (!map.current || !mapLoaded || prefersReducedMotion) return;
     const m = map.current;
     let t0 = 0;
 
