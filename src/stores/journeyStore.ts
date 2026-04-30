@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { Chapter, MLStage } from '@/types';
+import type { Chapter } from '@/types';
 
 interface JourneyState {
   // Scroll state
@@ -17,10 +17,6 @@ interface JourneyState {
   toggleAudio: () => void;
   currentClipId: string | null;
   setCurrentClip: (clipId: string | null) => void;
-
-  // ML visualization state
-  mlStage: MLStage;
-  setMlStage: (stage: MLStage) => void;
 
   // Computed - returns current chapter based on scroll progress
   getCurrentChapter: () => Chapter | null;
@@ -41,10 +37,6 @@ export const useJourneyStore = create<JourneyState>((set, get) => ({
   toggleAudio: () => set((state) => ({ isAudioEnabled: !state.isAudioEnabled })),
   currentClipId: null,
   setCurrentClip: (clipId) => set({ currentClipId: clipId }),
-
-  // ML visualization state
-  mlStage: 'idle',
-  setMlStage: (stage) => set({ mlStage: stage }),
 
   // Get current chapter based on scroll progress
   getCurrentChapter: () => {
