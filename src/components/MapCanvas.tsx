@@ -497,7 +497,7 @@ export function MapCanvas() {
 
     pulseRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(pulseRef.current);
-  }, [mapLoaded]);
+  }, [mapLoaded, prefersReducedMotion]);
 
   // ---- Fallback ----
   if (!MAPBOX_TOKEN) {
