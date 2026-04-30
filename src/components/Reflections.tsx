@@ -2,8 +2,7 @@
 
 /**
  * Three findings from the CS156 paper, in the voice of the chapter
- * narratives. Sits between the last chapter (NYC) and the existing
- * Conclusion section at ~0.92 scroll progress.
+ * narratives. Sits between the last chapter (NYC) and the Conclusion.
  *
  * Sources (for fact-check):
  *   - P1 — §4.3.1 metric tables + §7 Executive Summary (unsupervised).
@@ -17,10 +16,6 @@
  *   - P3 — §11 Executive Comparison. Direct paraphrase of the paper's
  *     own closing framing that unsupervised is "preferable" for
  *     exploratory analysis without predefined labels.
- *
- * Heading: left as a {HEADING TBD} placeholder. The existing Conclusion
- * below uses "What the Machine Learned". Rach needs to decide whether
- * to keep both, consolidate, or rename.
  */
 export default function Reflections() {
   return (
@@ -30,7 +25,7 @@ export default function Reflections() {
     >
       <div className="container mx-auto px-4 sm:px-8 max-w-3xl">
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif text-white/90 mb-4 sm:mb-6 text-center">
-          {`{HEADING TBD: "What the machine found" or Rach's pick}`}
+          What the machine found
         </h2>
         <p className="text-xs text-white/40 font-mono uppercase tracking-widest text-center mb-12 sm:mb-16">
           Three findings from the CS156 paper
