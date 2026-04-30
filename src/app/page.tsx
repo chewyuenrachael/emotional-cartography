@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ScrollManager } from '@/components/ScrollManager';
 import { MapCanvas } from '@/components/MapCanvas';
-import { AudioEngine } from '@/components/AudioEngine';
-import { Hero } from '@/components/Hero';
+import { AudioEngine, AudioEnablePrompt } from '@/components/AudioEngine';
 import { MLVisualizer } from '@/components/MLVisualizer';
 import { NarrativePanel } from '@/components/NarrativePanel';
 import { useJourneyStore } from '@/stores/journeyStore';
@@ -106,15 +105,34 @@ export default function HomePage() {
 
       {/* Scrollable content */}
       <ScrollManager>
-        {/* Hero Section — copy lives in <Hero /> (see src/components/Hero.tsx) */}
-        <Hero metadata={journeyData.metadata} />
-
+        {/* Hero Section */}
+        <section className="h-screen flex items-center justify-center relative z-10 pt-[15vh] md:pt-0">
+          <div className="text-center max-w-2xl px-4 sm:px-8">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-serif mb-4 sm:mb-6 animate-fade-in">
+              Emotional Cartography
+            </h1>
+            <p
+              className="text-base sm:text-lg lg:text-xl text-white/60 mb-6 sm:mb-8 animate-fade-in leading-relaxed"
+              style={{ animationDelay: '0.2s' }}
+            >
+              I recorded vlogs across {journeyData.metadata.countries} countries over{' '}
+              {journeyData.metadata.totalDuration}.
+              <br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>
+              Then I asked:{' '}
+              <em className="text-white/80">can a machine understand how I felt?</em>
+            </p>
+            <AudioEnablePrompt />
+            <div className="animate-bounce text-white/40 mt-8 sm:mt-12 text-sm sm:text-base">
+              ↓ Scroll to explore
+            </div>
+          </div>
+        </section>
 
         {/* Chapter Sections */}
         {journeyData.chapters.map((chapter) => {
-          const primaryClipId: string | undefined = chapter.audioClips[0];
-          const hasClip = Boolean(primaryClipId);
-          const clipFeatures = getChapterFeatures(primaryClipId ?? '');
+          const primaryClipId = chapter.audioClips[0];
+          const clipFeatures = getChapterFeatures(primaryClipId);
           const isMLExpanded = expandedML === chapter.id;
 
           return (
@@ -163,22 +181,11 @@ export default function HomePage() {
                         isMLExpanded ? 'block' : 'hidden'
                       } md:block`}
                     >
-                      {hasClip ? (
-                        <MLVisualizer
-                          spectrogramUrl={`/spectrograms/${primaryClipId}.png`}
-                          features={clipFeatures}
-                          cluster={chapter.emotionCluster}
-                        />
-                      ) : (
-                        <div className="text-xs font-mono text-white/40 border border-dashed border-white/20 rounded-lg p-6 leading-relaxed">
-                          <div className="text-white/60 uppercase tracking-widest mb-2">
-                            Audio pending
-                          </div>
-                          No clips registered for {chapter.city} yet. Spectrogram
-                          and extracted-feature visualisations will appear once
-                          clip IDs are supplied.
-                        </div>
-                      )}
+                      <MLVisualizer
+                        spectrogramUrl={`/spectrograms/${primaryClipId}.png`}
+                        features={clipFeatures}
+                        cluster={chapter.emotionCluster}
+                      />
                     </div>
                   </div>
                 </div>
