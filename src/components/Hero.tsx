@@ -21,7 +21,7 @@ import type { JourneyData } from '@/types';
  * the real raw count before shipping.
  */
 type HeroVariant = 'current' | 'forensic' | 'confessional' | 'analytical';
-const ACTIVE_VARIANT: HeroVariant = 'current';
+const ACTIVE_VARIANT: HeroVariant = 'forensic';
 
 interface HeroProps {
   metadata: JourneyData['metadata'];
