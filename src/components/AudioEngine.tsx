@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Howl, Howler } from 'howler';
 import { useJourneyStore } from '@/stores/journeyStore';
 import type { Chapter } from '@/types';
@@ -47,19 +47,32 @@ export function AudioEngine({ clips = [], chapters = [] }: AudioEngineProps) {
   const fadeTimeoutsRef = useRef<Map<string, number>>(new Map());
   const [currentWaveform, setCurrentWaveform] = useState<number[]>([]);
 
-  // -------- Preload all Howls --------
-  useEffect(() => {
-    clips.forEach((clip) => {
-      if (soundsRef.current.has(clip.id)) return;
+  // Lazy Howl factory — construct only when a clip is about to play or
+  // is the next-up prefetch target. Caches per clipId. Cleanup on unmount
+  // / clips-prop change unloads everything.
+  const getOrCreateSound = useCallback(
+    (clipId: string): Howl | null => {
+      const existing = soundsRef.current.get(clipId);
+      if (existing) return existing;
+      const clip = clips.find((c) => c.id === clipId);
+      if (!clip) return null;
       const sound = new Howl({
         src: [clip.url],
         preload: true,
         html5: false,
         volume: 0,
+        onloaderror: (_id, err) => {
+          console.warn(`audio load failed: ${clipId}`, err);
+        },
       });
-      soundsRef.current.set(clip.id, sound);
-    });
+      soundsRef.current.set(clipId, sound);
+      return sound;
+    },
+    [clips],
+  );
 
+  // Cleanup on unmount / clips change.
+  useEffect(() => {
     const sounds = soundsRef.current;
     const fades = fadeTimeoutsRef.current;
     return () => {
@@ -69,6 +82,17 @@ export function AudioEngine({ clips = [], chapters = [] }: AudioEngineProps) {
       sounds.clear();
     };
   }, [clips]);
+
+  // One-ahead prefetch: when the current clip changes, find which chapter
+  // it belongs to and warm up the next chapter's first clip.
+  useEffect(() => {
+    if (!currentClipId || !chapters.length) return;
+    const idx = chapters.findIndex((c) => c.audioClips.includes(currentClipId));
+    if (idx < 0 || idx >= chapters.length - 1) return;
+    const next = chapters[idx + 1];
+    const nextClipId = next.audioClips[0];
+    if (nextClipId) getOrCreateSound(nextClipId);
+  }, [currentClipId, chapters, getOrCreateSound]);
 
   // -------- IntersectionObserver → setCurrentClip --------
   useEffect(() => {
@@ -161,7 +185,7 @@ export function AudioEngine({ clips = [], chapters = [] }: AudioEngineProps) {
       return;
     }
 
-    const sound = sounds.get(currentClipId);
+    const sound = getOrCreateSound(currentClipId);
     if (!sound) return;
 
     const clip = clips.find((c) => c.id === currentClipId);
@@ -194,7 +218,7 @@ export function AudioEngine({ clips = [], chapters = [] }: AudioEngineProps) {
       sound.play();
     }
     sound.fade(sound.volume(), ACTIVE_VOLUME, CROSSFADE_MS);
-  }, [currentClipId, isAudioEnabled, clips]);
+  }, [currentClipId, isAudioEnabled, clips, getOrCreateSound]);
 
   // -------- Debounced seek tied to chapter progress --------
   useEffect(() => {
