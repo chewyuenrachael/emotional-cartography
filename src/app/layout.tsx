@@ -1,10 +1,17 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
+const siteUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : 'http://localhost:3000';
+
+const description =
+  'A corpus of 102 vlogs. Seven cities. Three years of one voice. Can a voice alone tell you how the speaker felt? An interactive study in emotion clustering.';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: 'Emotional Cartography | Rach Chew',
-  description:
-    'I recorded vlogs across seven cities and four continents over three years. Then I asked: can a machine understand how I felt? An interactive exploration of emotion recognition via audio clustering.',
+  description,
   keywords: [
     'machine learning',
     'emotion recognition',
@@ -16,9 +23,15 @@ export const metadata: Metadata = {
   authors: [{ name: 'Rach Chew' }],
   openGraph: {
     title: 'Emotional Cartography',
-    description:
-      'Can a machine understand how I felt? An interactive ML journey.',
+    description,
+    siteName: 'Emotional Cartography',
     type: 'website',
+    url: siteUrl,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Emotional Cartography',
+    description,
   },
 };
 
