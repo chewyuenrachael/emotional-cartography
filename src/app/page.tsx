@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MotionConfig } from 'framer-motion';
 import { ScrollManager } from '@/components/ScrollManager';
 import { MapCanvas } from '@/components/MapCanvas';
-import { AudioEngine, AudioEnablePrompt } from '@/components/AudioEngine';
+import { AudioEngine } from '@/components/AudioEngine';
 import { MLVisualizer } from '@/components/MLVisualizer';
 import { NarrativePanel } from '@/components/NarrativePanel';
+import { Hero } from '@/components/Hero';
 import Reflections from '@/components/Reflections';
+import { ClusterMap, type ClipPoint } from '@/components/ClusterMap';
 import { useJourneyStore } from '@/stores/journeyStore';
 import type { JourneyData, AudioClipFeatures } from '@/types';
 import type { AudioClipInfo } from '@/components/AudioEngine';
@@ -36,12 +38,11 @@ interface ClipData {
 }
 
 export default function HomePage() {
-  const { setChapters, getCurrentChapter } = useJourneyStore();
+  const setChapters = useJourneyStore((s) => s.setChapters);
   const [journeyData, setJourneyData] = useState<JourneyData | null>(null);
   const [clipDataMap, setClipDataMap] = useState<Map<string, ClipData>>(new Map());
   const [audioClips, setAudioClips] = useState<AudioClipInfo[]>([]);
   const [expandedML, setExpandedML] = useState<string | null>(null);
-  const currentChapter = getCurrentChapter();
 
   // Load journey data
   useEffect(() => {
@@ -83,6 +84,25 @@ export default function HomePage() {
       .catch((err) => console.error('Failed to load journey data:', err));
   }, [setChapters]);
 
+  // Build the PCA scatter input: one ClipPoint per loaded clip with MFCC.
+  const clusterPoints = useMemo<ClipPoint[]>(() => {
+    if (!journeyData) return [];
+    return journeyData.chapters.flatMap((ch) =>
+      ch.audioClips
+        .map((clipId) => {
+          const clip = clipDataMap.get(clipId);
+          if (!clip || !clip.features.mfcc?.length) return null;
+          return {
+            id: clipId,
+            mfcc: clip.features.mfcc,
+            cluster: ch.emotionCluster.id,
+            city: ch.city,
+          } satisfies ClipPoint;
+        })
+        .filter((p): p is ClipPoint => p !== null),
+    );
+  }, [journeyData, clipDataMap]);
+
   // Get clip features for current chapter
   const getChapterFeatures = (clipId: string): AudioClipFeatures => {
     const clipData = clipDataMap.get(clipId);
@@ -108,29 +128,7 @@ export default function HomePage() {
 
       {/* Scrollable content */}
       <ScrollManager>
-        {/* Hero Section */}
-        <section className="h-screen flex items-center justify-center relative z-10 pt-[15vh] md:pt-0">
-          <div className="text-center max-w-2xl px-4 sm:px-8">
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-serif mb-4 sm:mb-6 animate-fade-in">
-              Emotional Cartography
-            </h1>
-            <p
-              className="text-base sm:text-lg lg:text-xl text-white/60 mb-6 sm:mb-8 animate-fade-in leading-relaxed"
-              style={{ animationDelay: '0.2s' }}
-            >
-              I recorded vlogs across {journeyData.metadata.countries} countries over{' '}
-              {journeyData.metadata.totalDuration}.
-              <br className="hidden sm:block" />
-              <span className="sm:hidden"> </span>
-              Then I asked:{' '}
-              <em className="text-white/80">can a machine understand how I felt?</em>
-            </p>
-            <AudioEnablePrompt />
-            <div className="animate-bounce text-white/40 mt-8 sm:mt-12 text-sm sm:text-base">
-              ↓ Scroll to explore
-            </div>
-          </div>
-        </section>
+        <Hero metadata={journeyData.metadata} />
 
         {/* Chapter Sections */}
         {journeyData.chapters.map((chapter) => {
@@ -202,6 +200,9 @@ export default function HomePage() {
         {/* Findings from the CS156 paper */}
         <Reflections />
 
+        {/* The structure, plotted — PCA scatter of all clips by cluster */}
+        <ClusterMap points={clusterPoints} />
+
         {/* Conclusion Section */}
         <section className="min-h-screen flex items-center justify-center relative z-10 py-16 md:py-0">
           <div className="text-center max-w-3xl px-4 sm:px-8">
@@ -209,9 +210,8 @@ export default function HomePage() {
               What I Learned
             </h2>
             <blockquote className="text-lg sm:text-xl lg:text-2xl font-serif italic text-white/90 border-l-4 border-purple-500 pl-4 sm:pl-6 text-left">
-              &quot;The process of systematizing something as messy as emotion taught me
-              that even the most human problems can benefit from structure—if you
-              approach them with humility.&quot;
+              &quot;The useful axes of variation in a voice may not be the ones
+              humans have words for.&quot;
             </blockquote>
 
             {/* Metrics summary */}
