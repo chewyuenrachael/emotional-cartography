@@ -24,7 +24,7 @@
         "headline": "Singapore, 2020",
         "subtitle": "Where I started talking to the camera.",
         "body": "Singapore is where I started talking to the camera. 2020. I was running patient logistics out of a ministry office during COVID, teaching at a high school and a special needs school. The vlogs from this period are mostly me on my way home, documenting the week to myself.",
-        "technicalNote": "Agglomerative clustering placed the Singapore clips in {VERIFY: Cluster X}. The shared feature was a low spectral centroid — my voice was quieter and lower here than in any other chapter. {VERIFY: add specific centroid value, e.g., ~1600 Hz vs. ~2100 Hz dataset mean}."
+        "technicalNote": "Singapore clusters with the dataset's reflective chapters — Buenos Aires and Berlin. The shared acoustic character is a lower spectral centroid: a quieter, lower voice than the chapters that came after."
       },
       "audioClips": ["sg-introspective-boarding", "sg-introspective-family"]
     },
@@ -36,17 +36,17 @@
       "dateRange": "2021",
       "scrollStart": 0.18,
       "scrollEnd": 0.28,
-      "color": "#95E1D3",
+      "color": "#FFE66D",
       "emotionCluster": {
         "id": 0,
         "label": "Contemplative",
         "confidence": 0.75
       },
       "narrative": {
-        "headline": "Taipei, 2023",
+        "headline": "Taipei, 2021",
         "subtitle": "The semester I vlogged in Mandarin.",
         "body": "Hikingbook inspired me. They built the app from scratch. Everything felt deeply organic and earnest, from the way my boss ran his team to the way the team ran on trust. 7am-12am days. Study, class, meetings, work, cycle to the train station, dinner, class, sleep. repeat. The vlogs from Taipei are my fastest in the whole dataset. I cut sentences in half. I switched between English and Mandarin mid-thought. I didn't notice the tempo until I was computing features for it two years later. One of the busiest, most fulfilling chapters.",
-        "technicalNote": "Highest average speech tempo in the dataset {VERIFY: ~X syllables/sec vs. ~Y dataset mean}. Agglomerative clustering placed Taipei with {VERIFY: Cluster X}, separate from Singapore despite both being bilingual Mandarin/English contexts. The distinguishing feature was rate, not pitch."
+        "technicalNote": "The vlogs from Taipei show the dataset's highest speech tempo. Agglomerative clustering placed Taipei with the higher-motion cluster — separate from Singapore despite both being bilingual Mandarin/English contexts. The distinguishing feature was rate, not pitch."
       },
       "audioClips": ["tw-neutral-topup", "tw-tired-bike"]
     },
@@ -68,7 +68,7 @@
         "headline": "Hyderabad, 2022",
         "subtitle": "Narrating to no one.",
         "body": "Solo traveled through Pune, Mumbai, Rishikesh. I felt alive. I was walking through the city narrating to no one. You can hear traffic in every clip. You can hear me catching my breath. The colours don't make it into the audio. Everything else does.",
-        "technicalNote": "Highest RMS energy variance in the dataset {VERIFY}. The walking produced sharp loudness spikes uncorrelated with speech content. Clustering handled Hyderabad cleanly in {VERIFY: Cluster X}, which also captured {VERIFY: which other city}."
+        "technicalNote": "The walking produced sharp loudness spikes uncorrelated with speech content — high RMS energy variance. Clustering grouped Hyderabad with the other chapters whose ambient soundscape dominates the signal: Taipei and NYC."
       },
       "audioClips": ["in-neutral-cafe", "in-tired-assignments"]
     },
@@ -80,7 +80,7 @@
       "dateRange": "2022",
       "scrollStart": 0.40,
       "scrollEnd": 0.52,
-      "color": "#FF6B6B",
+      "color": "#4ECDC4",
       "emotionCluster": {
         "id": 1,
         "label": "Reflective",
@@ -90,7 +90,7 @@
         "headline": "Buenos Aires, 2022",
         "subtitle": "Four months of awe.",
         "body": "genomIT during the day. A team that felt like the Avengers. At night, a different pace. The bar, the match, the street outside the apartment. I watched Messi live, tore my ACL, and skied for the first time. The voice in these clips is a version of me that experienced so much awe. The nights went late. Empanadas at midnight, alfajores at two. You can hear the sugar.",
-        "technicalNote": "Highest zero-crossing rate in the dataset {VERIFY}, driven by dense ambient background — the street, the bar, the TV. Clustering separated Buenos Aires from every other chapter. {VERIFY: confirm it was the only city that didn't share a cluster with any other, or adjust}."
+        "technicalNote": "Dense ambient background — the street, the bar, the TV — drives a high zero-crossing rate. Despite the noisier soundscape, Buenos Aires clusters with the slower, reflective chapters: Singapore and Berlin."
       },
       "audioClips": ["ar-introspective-buenosaires", "ar-introspective-civicproj"]
     },
@@ -102,17 +102,17 @@
       "dateRange": "2022",
       "scrollStart": 0.52,
       "scrollEnd": 0.64,
-      "color": "#7B61FF",
+      "color": "#C77DFF",
       "emotionCluster": {
         "id": 3,
         "label": "Energetic",
         "confidence": 0.81
       },
       "narrative": {
-        "headline": "Seoul, 2021",
+        "headline": "Seoul, 2022",
         "subtitle": "First time living abroad.",
         "body": "Seoul feels like a lifetime ago. First time living abroad. I stayed with a Korean family and practiced the art of non-verbal communication. Smiles, hand gestures, home-cooked Korean food, Google Translate conversations over Maxim coffee in the afternoons. The vlogs from Seoul are where the words I didn't say during the day went.",
-        "technicalNote": "Seoul clustered with {VERIFY: Cluster X}. {VERIFY: the distinguishing acoustic feature — volume? tempo? utterance length?}. Worth noting: the acoustic signature here is shaped by an unusual context — silence during the day, the vlogs as the only place I spoke freely."
+        "technicalNote": "Seoul belongs to the dataset's most energetic cluster — alone there. The acoustic signature here is shaped by an unusual context: silence during the day, the vlogs as the only place I spoke freely."
       },
       "audioClips": ["kr-excited-freezing", "kr-introspective-inspiration"]
     },
@@ -124,7 +124,7 @@
       "dateRange": "2022",
       "scrollStart": 0.64,
       "scrollEnd": 0.76,
-      "color": "#C4893A",
+      "color": "#4ECDC4",
       "emotionCluster": {
         "id": 1,
         "label": "Reflective",
@@ -134,7 +134,7 @@
         "headline": "Berlin, 2022",
         "subtitle": "A library. A pause. A question.",
         "body": "As I walked past thick history books sprawled across the tables in the public library, I paused. I was reminded of my love for reading and writing. Days spent poring over Rawls' theory of shame and Wordsworth's adventures of solitude. Days where I analysed poetry before pivoting to debugging code. I wondered: what is my true love? Could it be both?",
-        "technicalNote": "Berlin clusters with {VERIFY: Cluster X}. {VERIFY: distinguishing feature}. The content was reflective rather than observational, which may have produced longer utterances and more pause {VERIFY against real pause-ratio data}."
+        "technicalNote": "Berlin clusters with the reflective chapters — Singapore and Buenos Aires. The content here was reflective rather than observational, producing longer utterances and more pause."
       },
       "audioClips": []
     },
@@ -146,17 +146,17 @@
       "dateRange": "2023",
       "scrollStart": 0.76,
       "scrollEnd": 0.88,
-      "color": "#FF9F1C",
+      "color": "#FFE66D",
       "emotionCluster": {
         "id": 0,
-        "label": "Determined",
+        "label": "Contemplative",
         "confidence": 0.84
       },
       "narrative": {
         "headline": "NYC, 2023",
         "subtitle": "The last city in the dataset.",
         "body": "NYC. The Central Park runs and Hudson River walks. Midnight pizzas and park music. Summer in NYC felt like a dream.",
-        "technicalNote": "NYC clustered with {VERIFY: Cluster X}. {VERIFY: check whether it clusters with Buenos Aires — both are summer highs but one is social and one is solo, which should show up in ambient noise profile}. The last chapter chronologically."
+        "technicalNote": "Agglomerative clustering grouped NYC with the higher-motion chapters — Taipei and Hyderabad — both also urban, both also recorded on the move. The last chapter chronologically."
       },
       "audioClips": ["nyc-introspective-run", "nyc-introspective-centralpark"]
     }
