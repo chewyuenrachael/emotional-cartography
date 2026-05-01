@@ -134,7 +134,7 @@
         "headline": "Berlin, 2022",
         "subtitle": "A library. A pause. A question.",
         "body": "As I walked past thick history books sprawled across the tables in the public library, I paused. I was reminded of my love for reading and writing. Days spent poring over Rawls' theory of shame and Wordsworth's adventures of solitude. Days where I analysed poetry before pivoting to debugging code. I wondered: what is my true love? Could it be both?",
-        "technicalNote": "Berlin clusters with the reflective chapters — Singapore and Buenos Aires. The content here was reflective rather than observational, producing longer utterances and more pause."
+        "technicalNote": "No clips from Berlin made it into the analysis dataset — the chapter is text-only. Berlin sits with the reflective cluster narratively, not statistically."
       },
       "audioClips": []
     },
